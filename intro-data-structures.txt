@@ -1,0 +1,129 @@
+Exercises
+
+1. 
+A line of people at an amusement park ride.
+
+The line is composed of members, represented as strings.
+There is a front to the line, as well as a back.
+When someone enters the line, place them at the end.
+People may leave the line whenever they see fit, and those behind them take their place.
+Given the above real-world information, use an array data structure to code the following solution.
+
+a) Use an array input: ["Vivian", "Ava", "Josh", "Patrick", "Mike"]
+b) Insert a new person, "Mary" at the end of the line. In other words, you should insert Mary after Mike.
+c) Find a person in line named "Josh." This function should return the position of 2 in the array, (recall that arrays are 0-based).
+d) Find a person in line named "Emily." What should your function return if it does not find the item in the array?
+e) What if Ava wants to allow a friend, "Melissa", to cut in line in front of her? How would you code this so Melissa appears before Ava?
+f) If Patrick wants to leave the line, how would you delete him from the array?
+
+A:
+
+```JS 
+
+var parkRiders = ["Vivian", "Ava", "Josh", "Patrick", "Mike"];
+
+function riderQue(parkRiders,rideCut,riderName,friend) {
+ 
+  var searchRider = parkRiders.includes(riderName);
+  var friendRider = parkRiders.includes(friend);
+  var isRiderLocated = parkRiders.indexOf(riderName);
+  var friendLocation = parkRiders.indexOf(friend);
+ 
+  if(rideCut===null && searchRider===true && friendRider===false) {
+    //find rider position or index if rider is in line
+    
+    return isRiderLocated;
+  }
+  
+  /* Sample log:
+  console.log(riderQue(parkRiders,null,'Patrick'));
+  -> returns 3 */
+  
+  else if(rideCut===null && searchRider===false && friendRider===false) {
+   //add riders at the end of the que
+    var addRider = parkRiders.push(riderName);
+    return parkRiders;
+  }
+    
+  /* Sample log:
+  console.log(riderQue(parkRiders,null,'Kim'));
+  -> returns ["Vivian", "Ava", "Josh", "Patrick", "Mike", "Kim"] */
+  
+  else if (rideCut===0 && searchRider===true && friendRider===false && friendLocation===-1){
+    //allow riders to cut the que
+    var insertRider = parkRiders.splice(isRiderLocated,rideCut,friend);
+    return parkRiders;
+  }
+  
+  /* Sample log:
+  console.log(riderQue(parkRiders,0,'Ava','Kim'));
+  -> returns ["Vivian", "Kim", "Ava", "Josh", "Patrick", "Mike"] */
+  
+  else if(rideCut===1 && searchRider===true) {
+    //remove riders at any index position
+    var removeRider = parkRiders.splice(isRiderLocated,rideCut);
+    return parkRiders;
+  }
+  
+  /* Sample log:
+  console.log(riderQue(parkRiders,1,'Josh'));
+  -> returns ["Vivian", "Ava", "Patrick", "Mike"] */
+  
+  else {
+    return parkRiders; 
+  }
+}
+
+
+console.log(riderQue(parkRiders,0,'Patrick','Kim'));
+
+```
+2. Provide another real-world example that you can model using a data structure.
+
+A:
+
+```JS
+
+/*A queueing system that follows a first in, first out means of prioritizing service to barbershop patrons.*/
+
+var shopQue =['Tom','Bob','Dan','Ben'];
+  //Waiting list
+
+function barberShopQue(barber,doorOpen,newCustomer) {
+  
+  
+  if(barber===1 && doorOpen===false){
+   var takeNextCustomer = shopQue.shift();
+    return ['Current customer: ' + takeNextCustomer, 'Customers waiting: ' + shopQue];
+  }
+  
+  //Currently served customer and those waiting in a condition where there are no new customers coming through door
+  //Sample log: console.log(barberShopQue(1,false));
+  //Returns -> ["Current customer: Tom", "Customers waiting: Bob,Dan,Ben"]
+  
+
+  else if((barber===0) && shopQue.length < 10 && doorOpen===true){
+    var customerEnterOk = shopQue.push(newCustomer);
+    return ['Customers waiting: ' + shopQue];
+  }
+  
+  //When customer enters shop, will be added to shopQue array waiting list 
+  //Sample log: console.log(barberShopQue(0,true,'Jay'));
+  //Returns -> ["Customers in shop: Tom,Bob,Dan,Ben,Jay"]
+
+
+  else {
+    return shopQue;
+  }
+  
+}
+console.log(barberShopQue(1,false,'Jay'));
+
+```
+How would your data structure allow developers to access and manipulate the data?
+
+A:
+
+First In, First Out: data would be accessed via an array. First element will have priority and can be manipulated using an Array.prototype.shift() method. 
+The shift() method removes the first element from an array and returns that removed element. This method changes the length of the array. New elements added
+using the Array.prototype.push() method. The push() method adds one or more elements to the end of an array and returns the new length of the array.
